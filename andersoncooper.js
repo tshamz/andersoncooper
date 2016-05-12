@@ -86,9 +86,9 @@ controller.hears([/^help$/], ['direct_message'], function(bot, message) {
   bot.reply(message, responses.help);
 });
 
-controller.on(['direct_message'], function(bot, message) {
-  console.log('ding');
-});
+// controller.on(['direct_message'], function(bot, message) {
+//   console.log('ding');
+// });
 
 controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot, message) {
   console.log(message.match[1]);
