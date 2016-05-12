@@ -78,6 +78,18 @@ var isValidUser = function(realName) {
   return deferred.promise;
 };
 
+var validateTweet = function(tweet) {
+  var numberOfUrls = 0;
+  var urlPattern = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig
+  var urlMatches = tweet.match(urlPattern);
+  if (urlMatches) {
+    numberOfUrls = urlMatches.length;
+    tweet = tweet.replace(urlPattern, '');
+  }
+  var totalUrlLength = numberOfUrls * 23;
+  var totalTweetLength = tweet.length + totalUrlLength;
+  return totalTweetLength <= 140;
+};
 
 
 // Listeners  ===============================================
@@ -87,13 +99,15 @@ controller.hears([/^help/, /help$/], 'direct_message', function(bot, message) {
 });
 
 controller.on(['direct_message'], function(bot, message) {
-  console.log('ding');
+  bot.reply(message, '_[nonsense]_');
 });
 
 controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot, message) {
-  console.log(message.match[1]);
+  var tweet = message.match[1];
+  var isValidTweet = validateTweet(tweet);
   bot.startConversation(message, function(err, convo) {
     convo.say('Hey! You just said: ' + message.match[1]);
+    convo.say('is this tweet valid? ' + isValidTweet);
   });
 });
 
