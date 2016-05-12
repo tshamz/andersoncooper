@@ -82,7 +82,9 @@ var isValidUser = function(realName) {
 
 // Listeners  ===============================================
 
-controller.hears([/^help$/], ['direct_message'], function(bot, message) {
+controller.hears([/help/], 'direct_message', function(bot, message) {
+  console.log('ding');
+  console.log(responses.help);
   bot.reply(message, responses.help);
 });
 
