@@ -82,73 +82,27 @@ var isValidUser = function(realName) {
 
 // Listeners  ===============================================
 
-controller.hears([/post to (\S+)\n([\s\S]*)/], 'direct_message', function(bot, message) {
-  var channelName = message.match[1];
-  var update = message.match[2];
-
-  var parsedMessages = update.split('\n\n\n').map(function(block) {
-    var messageParts = block.split('\n---\n');
-    return {
-      fallback: messageParts[1],
-      title: messageParts[0],
-      text: messageParts[1],
-      color: 'danger',
-      mrkdwn_in: ['fallback', 'text']
-    };
-  });
-
-  var validateChannel = isValidChannelName(bot, channelName);
-  var validateName = getRealNameFromId(bot, message.user).then(isValidUser);
-  var isValidated = Q.all([validateChannel, validateName]);
-
-  isValidated.spread(function(validChannel, validUser) {
-    if (!validUser) {
-      return bot.reply(message, 'Sorry, you\'re not authenticated to post.');
-    } else if (!validChannel) {
-      return bot.reply(message, 'Sorry, I can\'t post to the channel: ' + channelName + '.');
-    } else if (validUser && validChannel) {
-      var theDate = moment().format('dddd, MMMM Do YYYY');
-      bot.startConversation(message, function(err, convo) {
-        convo.say('*I\'m about to post the following:*');
-        convo.say({
-          username: 'Brian Williams: Dev Team News Anchor',
-          icon_url: 'http://dev.tylershambora.com/images/father-williams.jpg',
-          text: '<!channel>\n\n*Updates for ' + theDate + ':*',
-          attachments: parsedMessages
-        });
-        convo.ask(responses.confirm(bot, channelName, parsedMessages, theDate), [
-          responses.yes(bot, channelName, parsedMessages, theDate),
-          responses.no(bot),
-          responses.default()
-        ]);
-      });
-    }
-  });
+controller.hears(['help'], ['direct_message'], function(bot, message) {
+  bot.reply(message, "Look, I'm pretty stupid, I can only do a few things. If you want me to post a message to twitter, you need to send me a direct message that's prefixed with 'post to twitter [message]'. If you don't, I'll respond to you with nonsense. Also, if there's something wrong with your post, I won't send it, but I will tell you why. Talk to @tsham if you need further instruction.");
 });
 
-controller.hears(['hey mister'], ['direct_message', 'mention', 'direct_mention'], function(bot, message) {
-  getRealNameFromId(bot, message.user)
-    .then(isValidUser)
-    .then(function(result) {
-      bot.reply(message, 'Hello!');
-      if (result) {
-        bot.reply(message, 'Hey! You\'re pretty valid!');
-      }
-    });
+controller.hears([/post to twitter ([\s\S]*)/], 'direct_message', function(bot, message) {
+  console.log(message.match[1]);
 });
+
+// controller.hears(['hey mister'], ['direct_message', 'mention', 'direct_mention'], function(bot, message) {
+//   getRealNameFromId(bot, message.user)
+//     .then(isValidUser)
+//     .then(function(result) {
+//       bot.reply(message, 'Hello!');
+//       if (result) {
+//         bot.reply(message, 'Hey! You\'re pretty valid!');
+//       }
+//     });
+// });
 
 controller.on('direct_message, mention, direct_mention', function(bot, message) {
-  bot.api.reactions.add({
-    timestamp: message.ts,
-    channel: message.channel,
-    name: 'jesus',
-  }, function(err) {
-    if (err) {
-      console.log(err);
-    } else {
-      bot.reply(message, 'go with christ brah.');
-    }
-  });
+
 });
 
 
