@@ -82,11 +82,8 @@ var isValidUser = function(realName) {
 
 // Listeners  ===============================================
 
-controller.hears(['/help/'], ['direct_message'], function(bot, message) {
-  bot.reply(message, {
-    username: 'Anderson Cooper: Keeper of the Tweets',
-    text: "Look, I'm pretty stupid, I can only do a few things. If you want me to post a message to twitter, you need to send me a direct message that follows this pattern: `post to twitter [tweet]`. If you don't follow this pattern, I'll respond with nonsense. Also, if there's something wrong with your tweet, I won't send it and I'll try my best to tell you why. If you still have no idea what's going on, talk to @tsham."
-  });
+controller.hears([/help/], ['direct_message'], function(bot, message) {
+  bot.reply(message, responses.help);
 });
 
 controller.on(['direct_message'], function(bot, message) {
@@ -96,7 +93,7 @@ controller.on(['direct_message'], function(bot, message) {
 controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot, message) {
   console.log(message.match[1]);
   bot.startConversation(message, function(err, convo) {
-    convo.say('Hey! You just said: ' + message);
+    convo.say('Hey! You just said: ' + message.match[1]);
   });
 });
 
