@@ -82,62 +82,32 @@ var isValidUser = function(realName) {
 
 // Listeners  ===============================================
 
-controller.hears(['help'], ['direct_message'], function(bot, message) {
-  bot.reply(message, "Look, I'm pretty stupid, I can only do a few things. If you want me to post a message to twitter, you need to send me a direct message that's prefixed with 'post to twitter [message]'. If you don't, I'll respond to you with nonsense. Also, if there's something wrong with your post, I won't send it, but I will tell you why. Talk to @tsham if you need further instruction.");
+controller.hears(['/help/'], ['direct_message'], function(bot, message) {
+  bot.reply(message, {
+    username: 'Anderson Cooper: Keeper of the Tweets',
+    text: "Look, I'm pretty stupid, I can only do a few things. If you want me to post a message to twitter, you need to send me a direct message that follows this pattern: `post to twitter [tweet]`. If you don't follow this pattern, I'll respond with nonsense. Also, if there's something wrong with your tweet, I won't send it and I'll try my best to tell you why. If you still have no idea what's going on, talk to @tsham."
+  });
 });
 
-controller.hears([/post to twitter ([\s\S]*)/], 'direct_message', function(bot, message) {
+controller.on(['direct_message'], function(bot, message) {
+  console.log('ding');
+});
+
+controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot, message) {
   console.log(message.match[1]);
+  bot.startConversation(message, function(err, convo) {
+    convo.say('Hey! You just said: ' + message);
+  });
 });
-
-// controller.hears(['hey mister'], ['direct_message', 'mention', 'direct_mention'], function(bot, message) {
-//   getRealNameFromId(bot, message.user)
-//     .then(isValidUser)
-//     .then(function(result) {
-//       bot.reply(message, 'Hello!');
-//       if (result) {
-//         bot.reply(message, 'Hey! You\'re pretty valid!');
-//       }
-//     });
-// });
 
 controller.on('direct_message, mention, direct_mention', function(bot, message) {
 
 });
 
 
-controller.hears([/[\s\S]*/], ['direct_message', 'direct_mention', 'mention', 'ambient'], function(bot, message) {
-  if (readOnlyChannels.indexOf(message.channel) !== -1) {
-    getRealNameFromId(bot, message.user).then(function(realName) {
-      var options = {
-        token: process.env.MEGA_TOKEN,
-        ts: message.ts,
-        channel: message.channel,
-        as_user: true
-      };
+// controller.hears([/[\s\S]*/], ['direct_message', 'direct_mention', 'mention', 'ambient'], function(bot, message) {
 
-      console.log('%s said: "%s"', realName, message.text);
-      console.log('Attempting to delete the message.' );
-
-      // this whole block looks pretty ripe for some abstraction and recursion (tsham)
-      bot.api.chat.delete(options, function(err, response) {
-        if (!response.ok) {
-          console.log('Unable to delete due to error: ' + err);
-          console.log('Trying one more time in 2 seconds');
-          setTimeout(function() {
-            bot.api.chat.delete(options, function(err, response) {
-              if (!response.ok) {
-                console.log('Unable to delete after a second attempt due to error: ' + err);
-              }
-            });
-          }, 2000);
-        } else {
-          console.log('Message successfully deleted!');
-        }
-      });
-    });
-  }
-});
+// });
 
 controller.on('rtm_open', function(bot) {
   console.log('** The RTM api just connected: ' + bot.identity.name);
