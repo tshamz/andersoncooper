@@ -20,7 +20,7 @@ if (!process.env.BOT_TOKEN) {
 
 var controller = Botkit.slackbot({
   debug: true,
-  logLevel: 3
+  logLevel: 1
 });
 
 controller.configureSlackApp({
