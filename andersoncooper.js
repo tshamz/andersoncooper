@@ -3,6 +3,7 @@
 var Q                    = require('q');
 var moment               = require('moment');
 var Botkit               = require('botkit');
+var request              = require('request');
 var responses            = require('./responses.js');
 
 var whitelistedUsers     = [];
@@ -78,18 +79,18 @@ var isValidUser = function(realName) {
   return deferred.promise;
 };
 
-var validateTweet = function(tweet) {
-  var numberOfUrls = 0;
-  var urlPattern = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig
-  var urlMatches = tweet.match(urlPattern);
-  if (urlMatches) {
-    numberOfUrls = urlMatches.length;
-    tweet = tweet.replace(urlPattern, '');
-  }
-  var totalUrlLength = numberOfUrls * 23;
-  var totalTweetLength = tweet.length + totalUrlLength;
-  return totalTweetLength <= 140;
-};
+// var validateTweet = function(tweet) {
+//   var numberOfUrls = 0;
+//   var urlPattern = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig
+//   var urlMatches = tweet.match(urlPattern);
+//   if (urlMatches) {
+//     numberOfUrls = urlMatches.length;
+//     tweet = tweet.replace(urlPattern, '');
+//   }
+//   var totalUrlLength = numberOfUrls * 23;
+//   var totalTweetLength = tweet.length + totalUrlLength;
+//   return totalTweetLength <= 140;
+// };
 
 
 // Listeners  ===============================================
@@ -104,10 +105,24 @@ controller.on(['direct_message'], function(bot, message) {
 
 controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot, message) {
   var tweet = message.match[1];
-  var isValidTweet = validateTweet(tweet);
+  var encodedTweet = encodeURIComponent(tweet);
+  var resourceUrl = 'https://api.twitter.com/1.1/statuses/update.json';
+  var oauth = {
+    consumer_key: process.env.CONSUMER_KEY,
+    consumer_secret: process.env.CONSUMER_SECRET,
+    token: process.env.TWITTER_TOKEN,
+    token_secret: process.env.TOKEN_SECRET
+  };
+  var queryString = {
+    status: encodedTweet
+  };
   bot.startConversation(message, function(err, convo) {
     convo.say('Hey! You just said: ' + message.match[1]);
-    convo.say('is this tweet valid? ' + isValidTweet);
+    convo.say("I'm going to try and tweet this.");
+    request.post({url: resourceUrl, oauth: oauth, qs: queryString,}, function(error, response, body) {
+      console.log('error: ' + error);
+      console.log('body: ' + body);
+    });
   });
 });
 
