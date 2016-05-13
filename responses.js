@@ -32,9 +32,13 @@ module.exports = {
           console.log('body: ' + body);
           body = JSON.parse(body);
           if (body.hasOwnProperty('errors')) {
+            console.log('ding');
             body.errors.forEach(function(error) {
+              console.log('dong');
               convo.say(error.message);
             });
+          } else {
+
           }
         });
         convo.next();
