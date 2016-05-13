@@ -124,6 +124,7 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
       console.log(oauth);
       if (body.errors !== undefined) {
         body.errors.forEach(function(error) {
+          console.log(error.message);
           convo.say(error.message);
         });
       }
