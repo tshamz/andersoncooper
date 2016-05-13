@@ -3,6 +3,7 @@
 var Q                    = require('q');
 var moment               = require('moment');
 var Botkit               = require('botkit');
+var emoji                = require('node-emoji');
 var responses            = require('./responses.js');
 
 var whitelistedUsers     = [];
@@ -69,12 +70,13 @@ controller.hears([/^help/, /help$/], ['direct_message'], function(bot, message) 
 controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot, message) {
   console.log(message);
   var tweet = message.match[1];
-  var parsedTweet = tweet
+  var emojifiedTweet = emoji.emojify(tweet);
+  var parsedTweet = emojifiedTweet
     .replace(/<\S+?\|(.+?)>/g, '<$1>')
     .replace(/<|>/g, '')
-    .replace(/&amp/, '&')
-    .replace(/&gt/, '>')
-    .replace(/&lt/, '<');
+    .replace(/&amp;/, '&')
+    .replace(/&gt;/, '>')
+    .replace(/&lt;/, '<');
   var resourceUrl = 'https://api.twitter.com/1.1/statuses/update.json';
   var oauth = {
     consumer_key: process.env.CONSUMER_KEY,
