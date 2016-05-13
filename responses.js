@@ -49,7 +49,7 @@ module.exports = {
           } else {
             setTimeout(function() {
               convo.say('Great! Moving forward...');
-              console.log('https://twitter.com/bvatweetbot/status/' + parsedBody.id)
+              console.log('https://twitter.com/bvatweetbot/status/' + parsedBody.id_str);
               // bot.say({
               //   channel: '#tweet-game-on-fleek',
               //   username: 'Anderson Cooper: Keeper of the Tweets',
