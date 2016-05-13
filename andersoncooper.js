@@ -114,7 +114,7 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
     token_secret: process.env.TOKEN_SECRET
   };
   var queryString = {
-    status: encodedTweet
+    status: tweet
   };
   bot.startConversation(message, function(err, convo) {
     convo.say('Hey! You just said: ' + message.match[1]);
