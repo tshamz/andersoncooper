@@ -75,12 +75,12 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
       username: 'Anderson Cooper: Keeper of the Tweets',
       icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
       text: '*I\'m about to post the following to twitter:*',
-      attachments: {
+      attachments: [{
         fallback: tweet,
         text: tweet,
         color: '#00aced',
         mrkdwn_in: ['fallback', 'text']
-      }
+      }]
     });
     convo.ask(responses.confirm(), [
       responses.yes(bot, resourceUrl, oauth, queryString),
