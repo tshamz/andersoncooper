@@ -37,7 +37,7 @@ module.exports = {
                 icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
                 text: '*There was an error...*',
                 attachments: [{
-                  fallback: tweet,
+                  fallback: error.message,
                   title: 'Error:',
                   text: error.message,
                   color: '#00aced',
