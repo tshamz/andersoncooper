@@ -23,7 +23,7 @@ module.exports = {
       }]
     };
   },
-  yes: function(bot, channelName, parsedMessages, date) {
+  yes: function(bot, resourceUrl, oauth, queryString) {
     return {
       pattern: bot.utterances.yes,
       callback: function(response, convo) {
