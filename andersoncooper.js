@@ -117,7 +117,7 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
     status: tweet
   };
   bot.startConversation(message, function(err, convo) {
-    convo.say('Hey! You just said: ' + message.match[1]);
+    convo.say('Hey! You just said: >>>' + message.match[1]);
     convo.say("I'm going to try and tweet this.");
 
     request.post({url: resourceUrl, oauth: oauth, qs: queryString}, function(error, response, body) {
