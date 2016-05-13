@@ -60,7 +60,6 @@ controller.on(['direct_message'], function(bot, message) {
 
 controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot, message) {
   var tweet = message.match[1];
-  var encodedTweet = encodeURIComponent(tweet);
   var resourceUrl = 'https://api.twitter.com/1.1/statuses/update.json';
   var oauth = {
     consumer_key: process.env.CONSUMER_KEY,
@@ -84,8 +83,8 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
         mrkdwn_in: ['fallback', 'text']
       }
     });
-    convo.ask(responses.confirm(bot, channelName, parsedMessages, theDate), [
-      responses.yes(bot, channelName, parsedMessages, theDate),
+    convo.ask(responses.confirm(), [
+      responses.yes(bot, resourceUrl, oauth, queryString),
       responses.no(bot),
       responses.default()
     ]);
