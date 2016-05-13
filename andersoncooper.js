@@ -108,10 +108,10 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
   var encodedTweet = encodeURIComponent(tweet);
   var resourceUrl = 'https://api.twitter.com/1.1/statuses/update.json';
   var oauth = {
-    consumer_key: 'rUa6cFMIbAzAKHZRdWVn4mdJX',
-    consumer_secret: 'LMeuyqxYbWI3Zl0ay7gfoKcGCeqCUMLVsPqOIJT1hyEdr9V9ac',
-    token: '731137964663705600-e8UZyZx5qlV0fbJNyN9HwrwhmYWJzwZ',
-    token_secret: 'vTpkZhquOpyERxwPvQWaa4xSoTifOxEVr5AXtcSGyqhU9'
+    consumer_key: process.env.CONSUMER_KEY,
+    consumer_secret: process.env.CONSUMER_SECRET,
+    token: process.env.TWITTER_TOKEN,
+    token_secret: process.env.TOKEN_SECRET
   };
   var queryString = {
     status: encodedTweet
