@@ -121,8 +121,7 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
     convo.say("I'm going to try and tweet this.");
 
     request.post({url: resourceUrl, oauth: oauth, qs: queryString}, function(error, response, body) {
-      console.log(body);
-      if (body.hasOwnProperty(errors)) {
+      if (body.hasOwnProperty('errors')) {
         console.log('ding');
         body.errors.forEach(function(error) {
           console.log(error.message);
