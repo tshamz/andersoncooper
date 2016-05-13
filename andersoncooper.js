@@ -3,7 +3,6 @@
 var Q                    = require('q');
 var moment               = require('moment');
 var Botkit               = require('botkit');
-var request              = require('request');
 var responses            = require('./responses.js');
 
 var whitelistedUsers     = [];
@@ -49,10 +48,6 @@ bot.startRTM(function(err) {
 
 
 // Listeners  ===============================================
-
-// controller.hears([/^((?!help).)*$/, /^((?!post to twitter).)*$/], ['direct_message'], function(bot, message) {
-//   bot.reply(message, '_[nonsense]_');
-// });
 
 controller.hears([/^help/, /help$/], ['direct_message'], function(bot, message) {
   bot.reply(message, responses.help());
