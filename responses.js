@@ -23,7 +23,7 @@ module.exports = {
       }]
     };
   },
-  yes: function(bot, resourceUrl, oauth, queryString) {
+  yes: function(bot, userName, resourceUrl, oauth, queryString) {
     return {
       pattern: bot.utterances.yes,
       callback: function(response, convo) {
@@ -46,7 +46,15 @@ module.exports = {
               });
             });
           } else {
-            convo.say('Great! Moving forward...');
+            setTimeout(function() {
+              convo.say('Great! Moving forward...');
+              bot.say({
+                channel: '#tweet-game-on-fleek',
+                username: 'Anderson Cooper: Keeper of the Tweets',
+                icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
+                text: 'Hey! Checkout what '+ username +' just tweeted!\n' + 'https://twitter.com/bvatweetbot/status/' + parsedBody.id
+              });
+            }, 2000);
           }
         });
         convo.next();

@@ -47,6 +47,19 @@ bot.startRTM(function(err) {
 });
 
 
+// Helper Functions ===============================================
+
+var getRealNameFromId = function(bot, userId) {
+  var deferred = Q.defer();
+  var realName = '';
+  bot.api.users.info({user: userId}, function(err, response) {
+    realName = response.user.real_name.toLowerCase();
+    deferred.resolve(realName);
+  });
+  return deferred.promise;
+};
+
+
 // Listeners  ===============================================
 
 controller.hears([/^help/, /help$/], ['direct_message'], function(bot, message) {
@@ -57,7 +70,6 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
   console.log(message);
   var tweet = message.match[1];
   var parsedTweet = tweet.replace(/<\S+?\|(.+?)>/g, '<$1>').replace(/<|>/g, '');
-  console.log(parsedTweet);
   var resourceUrl = 'https://api.twitter.com/1.1/statuses/update.json';
   var oauth = {
     consumer_key: process.env.CONSUMER_KEY,
@@ -68,23 +80,25 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
   var queryString = {
     status: parsedTweet
   };
-  bot.startConversation(message, function(err, convo) {
-    convo.say({
-      username: 'Anderson Cooper: Keeper of the Tweets',
-      icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
-      text: '*I\'m about to post the following to twitter:*',
-      attachments: [{
-        fallback: tweet,
-        text: tweet,
-        color: '#00aced',
-        mrkdwn_in: ['fallback', 'text']
-      }]
+  getRealNameFromId(bot, message.user).then(function(userName) {
+    bot.startConversation(message, function(err, convo) {
+      convo.say({
+        username: 'Anderson Cooper: Keeper of the Tweets',
+        icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
+        text: '*I\'m about to post the following to twitter:*',
+        attachments: [{
+          fallback: tweet,
+          text: tweet,
+          color: '#00aced',
+          mrkdwn_in: ['fallback', 'text']
+        }]
+      });
+      convo.ask(responses.confirm(), [
+        responses.yes(bot, userName, resourceUrl, oauth, queryString),
+        responses.no(bot),
+        responses.default()
+      ]);
     });
-    convo.ask(responses.confirm(), [
-      responses.yes(bot, resourceUrl, oauth, queryString),
-      responses.no(bot),
-      responses.default()
-    ]);
   });
 });
 
