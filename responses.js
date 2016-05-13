@@ -40,7 +40,7 @@ module.exports = {
                   fallback: error.message,
                   title: 'Error:',
                   text: error.message,
-                  color: '#00aced',
+                  color: 'danger',
                   mrkdwn_in: ['fallback', 'text']
                 }]
               });
