@@ -50,12 +50,12 @@ bot.startRTM(function(err) {
 
 // Listeners  ===============================================
 
-controller.hears([/^help/, /help$/], 'direct_message', function(bot, message) {
-  bot.reply(message, responses.help());
+controller.hears([/^((?!help).)*$/, /^((?!post to twitter).)*$/], ['direct_message'], function(bot, message) {
+  bot.reply(message, '_[nonsense]_');
 });
 
-controller.on(['direct_message'], function(bot, message) {
-  bot.reply(message, '_[nonsense]_');
+controller.hears([/^help/, /help$/], ['direct_message'], function(bot, message) {
+  bot.reply(message, responses.help());
 });
 
 controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot, message) {
