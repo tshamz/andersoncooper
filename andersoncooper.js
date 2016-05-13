@@ -54,8 +54,7 @@ controller.hears([/^help/, /help$/], ['direct_message'], function(bot, message) 
 });
 
 controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot, message) {
-  console.log(bot);
-  console.log(message)
+  console.log(message);
   var tweet = message.match[1];
   var resourceUrl = 'https://api.twitter.com/1.1/statuses/update.json';
   var oauth = {
