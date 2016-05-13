@@ -110,6 +110,7 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
   // });
 });
 
+
 controller.on('rtm_open', function(bot) {
   console.log('** The RTM api just connected: ' + bot.identity.name);
 });
