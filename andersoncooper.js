@@ -48,51 +48,6 @@ bot.startRTM(function(err) {
 });
 
 
-
-// Helper Functions ===============================================
-
-var getRealNameFromId = function(bot, userId) {
-  var deferred = Q.defer();
-  var realName = '';
-  bot.api.users.info({user: userId}, function(err, response) {
-    realName = response.user.real_name.toLowerCase();
-    deferred.resolve(realName);
-  });
-  return deferred.promise;
-};
-
-var isValidChannelName = function(bot, channelName) {
-  var deferred = Q.defer();
-  bot.api.channels.list({}, function(err, response) {
-    deferred.resolve(response.channels.some(function(channel) {
-      return channel.name === channelName;
-    }));
-  });
-  return deferred.promise;
-};
-
-var isValidUser = function(realName) {
-  var deferred = Q.defer();
-  deferred.resolve(whitelistedUsers.some(function(userName) {
-    return userName === realName;
-  }));
-  return deferred.promise;
-};
-
-// var validateTweet = function(tweet) {
-//   var numberOfUrls = 0;
-//   var urlPattern = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig
-//   var urlMatches = tweet.match(urlPattern);
-//   if (urlMatches) {
-//     numberOfUrls = urlMatches.length;
-//     tweet = tweet.replace(urlPattern, '');
-//   }
-//   var totalUrlLength = numberOfUrls * 23;
-//   var totalTweetLength = tweet.length + totalUrlLength;
-//   return totalTweetLength <= 140;
-// };
-
-
 // Listeners  ===============================================
 
 controller.hears([/^help/, /help$/], 'direct_message', function(bot, message) {
@@ -117,31 +72,25 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
     status: tweet
   };
   bot.startConversation(message, function(err, convo) {
-    convo.say('Hey! You just said: >>>' + message.match[1]);
-    convo.say("I'm going to try and tweet this.");
-
-    request.post({url: resourceUrl, oauth: oauth, qs: queryString}, function(error, response, body) {
-      body = JSON.parse(body);
-      if (body.hasOwnProperty('errors')) {
-        console.log('ding');
-        body.errors.forEach(function(error) {
-          console.log(error.message);
-          convo.say(error.message);
-        });
+    convo.say('*I\'m about to post the following to twitter:*');
+    convo.say({
+      username: 'Anderson Cooper: Keeper of the Tweets',
+      icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
+      text: '',
+      attachments: {
+        fallback: tweet,
+        text: tweet,
+        color: '#00aced',
+        mrkdwn_in: ['fallback', 'text']
       }
-      console.log('body: ' + body);
     });
+    convo.ask(responses.confirm(bot, channelName, parsedMessages, theDate), [
+      responses.yes(bot, channelName, parsedMessages, theDate),
+      responses.no(bot),
+      responses.default()
+    ]);
   });
 });
-
-controller.on('direct_message, mention, direct_mention', function(bot, message) {
-
-});
-
-
-// controller.hears([/[\s\S]*/], ['direct_message', 'direct_mention', 'mention', 'ambient'], function(bot, message) {
-
-// });
 
 controller.on('rtm_open', function(bot) {
   console.log('** The RTM api just connected: ' + bot.identity.name);

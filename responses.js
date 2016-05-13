@@ -27,12 +27,14 @@ module.exports = {
       pattern: bot.utterances.yes,
       callback: function(response, convo) {
         convo.say('Great! Moving forward...');
-        bot.say({
-          channel: '#' + channelName,
-          username: 'Brian Williams: Dev Team News Anchor',
-          icon_url: 'http://dev.tylershambora.com/images/father-williams.jpg',
-          text: '<!channel>\n\n*Updates for ' + date + ':*',
-          attachments: parsedMessages
+        request.post({url: resourceUrl, oauth: oauth, qs: queryString}, function(error, response, body) {
+          body = JSON.parse(body);
+          console.log('body: ' + body);
+          if (body.hasOwnProperty('errors')) {
+            body.errors.forEach(function(error) {
+              convo.say(error.message);
+            });
+          }
         });
         convo.next();
       }
@@ -42,7 +44,7 @@ module.exports = {
     return {
       pattern: bot.utterances.no,
       callback: function(response, convo) {
-        convo.say('Perhaps later.');
+        convo.say('twitter sucks anyways, snapchat is way cooler.');
         convo.next();
       }
     };
