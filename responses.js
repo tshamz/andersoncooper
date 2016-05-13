@@ -27,18 +27,26 @@ module.exports = {
     return {
       pattern: bot.utterances.yes,
       callback: function(response, convo) {
-        convo.say('Great! Moving forward...');
         request.post({url: resourceUrl, oauth: oauth, qs: queryString}, function(error, response, body) {
           console.log('body: ' + body);
           var parsedBody = JSON.parse(body);
           if (parsedBody.hasOwnProperty('errors')) {
-            console.log('ding');
             parsedBody.errors.forEach(function(error) {
-              console.log('dong');
-              convo.say(error.message);
+              convo.say({
+                username: 'Anderson Cooper: Keeper of the Tweets',
+                icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
+                text: '*There was an error...*',
+                attachments: [{
+                  fallback: tweet,
+                  title: 'Error:',
+                  text: error.message,
+                  color: '#00aced',
+                  mrkdwn_in: ['fallback', 'text']
+                }]
+              });
             });
           } else {
-
+            convo.say('Great! Moving forward...');
           }
         });
         convo.next();
