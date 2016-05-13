@@ -71,11 +71,10 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
     status: tweet
   };
   bot.startConversation(message, function(err, convo) {
-    convo.say('*I\'m about to post the following to twitter:*');
     convo.say({
       username: 'Anderson Cooper: Keeper of the Tweets',
       icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
-      text: '',
+      text: '*I\'m about to post the following to twitter:*',
       attachments: {
         fallback: tweet,
         text: tweet,
