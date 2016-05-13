@@ -30,10 +30,10 @@ module.exports = {
         convo.say('Great! Moving forward...');
         request.post({url: resourceUrl, oauth: oauth, qs: queryString}, function(error, response, body) {
           console.log('body: ' + body);
-          body = JSON.parse(body);
-          if (body.hasOwnProperty('errors')) {
+          var parsedBody = JSON.parse(body);
+          if (parsedBody.hasOwnProperty('errors')) {
             console.log('ding');
-            body.errors.forEach(function(error) {
+            parsedBody.errors.forEach(function(error) {
               console.log('dong');
               convo.say(error.message);
             });
