@@ -68,7 +68,6 @@ controller.hears([/^help/, /help$/], ['direct_message'], function(bot, message) 
 });
 
 controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot, message) {
-  console.log(message);
   var tweet = message.match[1];
   var emojifiedTweet = emoji.emojify(tweet);
   var parsedTweet = emojifiedTweet
@@ -88,6 +87,7 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
     status: parsedTweet
   };
   getRealNameFromId(bot, message.user).then(function(userName) {
+    console.log(userName + ' just tried to post: ' + tweet);
     bot.startConversation(message, function(err, convo) {
       convo.say({
         username: 'Anderson Cooper: Keeper of the Tweets',

@@ -28,9 +28,7 @@ module.exports = {
       pattern: bot.utterances.yes,
       callback: function(response, convo) {
         request.post({url: resourceUrl, oauth: oauth, qs: queryString}, function(error, response, body) {
-          console.log('body: ' + body);
           var parsedBody = JSON.parse(body);
-          console.log(parsedBody);
           if (parsedBody.hasOwnProperty('errors')) {
             parsedBody.errors.forEach(function(error) {
               convo.say({
@@ -47,13 +45,12 @@ module.exports = {
               });
             });
           } else {
-            console.log('https://twitter.com/bvatweetbot/status/' + parsedBody.id_str);
-            // bot.say({
-            //   channel: '#tweet-game-on-fleek',
-            //   username: 'Anderson Cooper: Keeper of the Tweets',
-            //   icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
-            //   text: 'Hey! Checkout what *'+ userName +'* just tweeted!\n' + 'https://twitter.com/bvatweetbot/status/' + parsedBody.id_str
-            // });
+            bot.say({
+              channel: '#tweet-game-on-fleek',
+              username: 'Anderson Cooper: Keeper of the Tweets',
+              icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
+              text: 'Hey! Checkout what *'+ userName +'* just tweeted!\n' + 'https://twitter.com/bvatweetbot/status/' + parsedBody.id_str
+            });
           }
         });
         convo.next();
