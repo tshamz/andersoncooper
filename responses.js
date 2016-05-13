@@ -52,7 +52,7 @@ module.exports = {
                 channel: '#tweet-game-on-fleek',
                 username: 'Anderson Cooper: Keeper of the Tweets',
                 icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
-                text: 'Hey! Checkout what '+ username +' just tweeted!\n' + 'https://twitter.com/bvatweetbot/status/' + parsedBody.id
+                text: 'Hey! Checkout what '+ userName +' just tweeted!\n' + 'https://twitter.com/bvatweetbot/status/' + parsedBody.id
               });
             }, 2000);
           }
