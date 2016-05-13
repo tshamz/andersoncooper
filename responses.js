@@ -29,8 +29,8 @@ module.exports = {
       callback: function(response, convo) {
         convo.say('Great! Moving forward...');
         request.post({url: resourceUrl, oauth: oauth, qs: queryString}, function(error, response, body) {
-          body = JSON.parse(body);
           console.log('body: ' + body);
+          body = JSON.parse(body);
           if (body.hasOwnProperty('errors')) {
             body.errors.forEach(function(error) {
               convo.say(error.message);
