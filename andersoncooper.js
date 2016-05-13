@@ -122,6 +122,11 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
 
     request.post({url: resourceUrl, oauth: oauth, qs: queryString}, function(error, response, body) {
       console.log(oauth);
+      if (body.errors !== undefined) {
+        body.errors.forEach(function(error) {
+          convo.say(error.message);
+        });
+      }
       console.log('error: ' + error);
       console.log('body: ' + body);
     });
