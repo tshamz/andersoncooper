@@ -63,7 +63,7 @@ var getRealNameFromId = function(bot, userId) {
 
 // Listeners  ===============================================
 
-controller.hears([/^help/, /help$/, /^Help/, /Help$/, /^HELP/, /HELP$/, /HELP!$//], ['direct_message'], function(bot, message) {
+controller.hears([/^help/, /help$/, /^Help/, /Help$/, /^HELP/, /HELP$/, /HELP!$/], ['direct_message'], function(bot, message) {
   bot.reply(message, responses.help());
 });
 
