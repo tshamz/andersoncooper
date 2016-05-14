@@ -6,7 +6,7 @@ var Botkit               = require('botkit');
 var emoji                = require('node-emoji');
 var responses            = require('./responses.js');
 
-var blacklistedUsers     = ['tyler shambora'];
+var blacklistedUsers     = ['tyler shambora', 'niiki johnson'];
 var readOnlyChannels     = [];
 
 
