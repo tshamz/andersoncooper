@@ -4,7 +4,7 @@ module.exports = {
     return {
       username: 'Anderson Cooper: Keeper of the Tweets',
       icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
-      text: "Look, I'm pretty stupid, I can only do a few things. If you want me to post a message to twitter, you need to send me a direct message that follows this pattern: `post to twitter [tweet]`. If you don't follow this pattern, I won't respond. Also, if there's something wrong with your tweet, I won't send it and I'll try my best to tell you why. If you still have no idea what's going on, talk to @tsham.\n\n*NOTE: IF YOU'RE HAVING TROUBLE POSTING CERTAIN @mentions OR #hashtags, prefix them with a \ character, like \#this.*"
+      text: "Look, I'm pretty stupid, I can only do a few things. If you want me to post a message to twitter, you need to send me a direct message that follows this pattern: `post to twitter [tweet]`. If you don't follow this pattern, I won't respond. Also, if there's something wrong with your tweet, I won't send it and I'll try my best to tell you why. If you still have no idea what's going on, talk to @tsham.\n\n*NOTE: ALWAYS PREFIX @mentions OR #hashtags WITH A \ CHARACTER, LIKE \#this.*"
     };
   },
   confirm: function() {
