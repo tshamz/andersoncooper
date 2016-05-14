@@ -88,27 +88,27 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
   var queryString = {
     status: parsedTweet
   };
-  // getRealNameFromId(bot, message.user).then(function(userName) {
-  //   console.log(userName + ' just tried to post: ' + tweet);
-  //   bot.startConversation(message, function(err, convo) {
-  //     convo.say({
-  //       username: 'Anderson Cooper: Keeper of the Tweets',
-  //       icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
-  //       text: '*I\'m about to post the following to twitter:*',
-  //       attachments: [{
-  //         fallback: tweet,
-  //         text: tweet,
-  //         color: '#00aced',
-  //         mrkdwn_in: ['fallback', 'text']
-  //       }]
-  //     });
-  //     convo.ask(responses.confirm(), [
-  //       responses.yes(bot, userName, resourceUrl, oauth, queryString),
-  //       responses.no(bot),
-  //       responses.default()
-  //     ]);
-  //   });
-  // });
+  getRealNameFromId(bot, message.user).then(function(userName) {
+    console.log(userName + ' just tried to post: ' + tweet);
+    bot.startConversation(message, function(err, convo) {
+      convo.say({
+        username: 'Anderson Cooper: Keeper of the Tweets',
+        icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
+        text: '*I\'m about to post the following to twitter:*',
+        attachments: [{
+          fallback: tweet,
+          text: tweet,
+          color: '#00aced',
+          mrkdwn_in: ['fallback', 'text']
+        }]
+      });
+      convo.ask(responses.confirm(), [
+        responses.yes(bot, userName, resourceUrl, oauth, queryString),
+        responses.no(bot),
+        responses.default()
+      ]);
+    });
+  });
 });
 
 
