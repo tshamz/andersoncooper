@@ -77,7 +77,8 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
     .replace(/&amp;/, '&')
     .replace(/&gt;/, '>')
     .replace(/&lt;/, '<')
-    .replace(/\\@|\\#/, '');
+    .replace(/\\@/g, '@')
+    .replace(/\\#/g, '#');
   console.log(parsedTweet);
   var resourceUrl = 'https://api.twitter.com/1.1/statuses/update.json';
   var oauth = {
