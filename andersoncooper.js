@@ -91,7 +91,7 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
   getRealNameFromId(bot, message.user).then(function(userName) {
     console.log(userName + ' just tried to post: ' + tweet);
     if (blacklistedUsers.indexOf(userName) !== -1) {
-      convo.say('you done fucked up once before, you can no longer post.');
+      bot.reply(message, 'you done fucked up once before, you can no longer post.');
     } else {
       bot.startConversation(message, function(err, convo) {
         convo.say({
