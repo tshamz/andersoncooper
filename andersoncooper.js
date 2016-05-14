@@ -6,7 +6,7 @@ var Botkit               = require('botkit');
 var emoji                = require('node-emoji');
 var responses            = require('./responses.js');
 
-var whitelistedUsers     = [];
+var blacklistedUsers     = ['tyler shambora'];
 var readOnlyChannels     = [];
 
 
@@ -92,6 +92,10 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
   };
   getRealNameFromId(bot, message.user).then(function(userName) {
     console.log(userName + ' just tried to post: ' + tweet);
+    if (blacklistedUsers.indexOf(userName) !== -1) {
+      convo.say('you done fucked up once before, you can no longer post.');
+      return false;
+    }
     bot.startConversation(message, function(err, convo) {
       convo.say({
         username: 'Anderson Cooper: Keeper of the Tweets',
