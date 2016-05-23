@@ -117,7 +117,9 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
 
 controller.on('direct_message',function(bot, message) {
   console.log(message);
-  bot.reply(message, 'hey sup?');
+  if (message.text.indexOf('help') === -1 || message.text.indexOf('post to twitter') === -1) {
+    bot.reply(message, 'Want me to do something? Try asking for "help"');
+  }
 });
 
 
