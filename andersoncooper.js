@@ -94,17 +94,7 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
       bot.reply(message, 'you done fucked up once before, you can no longer post.');
     } else {
       bot.startConversation(message, function(err, convo) {
-        convo.say({
-          username: 'Anderson Cooper: Keeper of the Tweets',
-          icon_url: 'http://dev.tylershambora.com/images/anderson-pooper.jpg',
-          text: '*I\'m about to post the following to twitter:*',
-          attachments: [{
-            fallback: parsedTweet,
-            text: parsedTweet,
-            color: '#00aced',
-            mrkdwn_in: ['fallback', 'text']
-          }]
-        });
+        convo.say(responses.startConvo(parsedTweet));
         convo.ask(responses.confirm(), [
           responses.yes(bot, userName, resourceUrl, oauth, queryString),
           responses.no(bot),
