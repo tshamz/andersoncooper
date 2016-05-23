@@ -10,7 +10,6 @@ var blacklistedUsers     = [];
 var readOnlyChannels     = [];
 
 
-
 // Init ===============================================
 
 if (!process.env.BOT_TOKEN) {
@@ -68,16 +67,17 @@ controller.hears('help', ['direct_message'], function(bot, message) {
 });
 
 controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot, message) {
+  // @mentions and #hashtags must be prefixed like \@this and \#this or else they'll be interpreted and handled as slack @usernames and #channels
   var tweet = message.match[1];
-  var emojifiedTweet = emoji.emojify(tweet);
+  var emojifiedTweet = emoji.emojify(tweet);  // convert slack emoji codes to unicode
   var parsedTweet = emojifiedTweet
-    .replace(/<\S+?\|(.+?)>/g, '<$1>')
-    .replace(/<|>/g, '')
-    .replace(/&amp;/, '&')
-    .replace(/&gt;/, '>')
-    .replace(/&lt;/, '<')
-    .replace(/\\@/g, '@')
-    .replace(/\\#/g, '#');
+    .replace(/<\S+?\|(.+?)>/g, '<$1>')  // parse url sequences to use originally typed version if available
+    .replace(/<|>/g, '')  // remove "<" and ">" from url sequences
+    .replace(/&amp;/, '&')  // convert non-control encoded "&amp;" to "&"
+    .replace(/&gt;/, '>')  // convert non-control encoded "&gt;" to ">"
+    .replace(/&lt;/, '<')  // convert non-control encoded "&lt;" to "<"
+    .replace(/\\@/g, '@')  // convert "\@" sequences to "@" since @ is reserved for slack usernames
+    .replace(/\\#/g, '#');  // convert "\#" sequences to "#" since # is reserved for slack channel names
   var resourceUrl = 'https://api.twitter.com/1.1/statuses/update.json';
   var oauth = {
     consumer_key: process.env.CONSUMER_KEY,
@@ -91,7 +91,7 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
   getRealNameFromId(bot, message.user).then(function(userName) {
     console.log(userName + ' just tried to post: ' + tweet);
     if (blacklistedUsers.indexOf(userName) !== -1) {
-      bot.reply(message, 'you done fucked up once before, you can no longer post.');
+      bot.reply(message, 'you done goofed up once before, therefore you can no longer post.');
     } else {
       bot.startConversation(message, function(err, convo) {
         convo.say(responses.startConvo(parsedTweet));
@@ -106,12 +106,10 @@ controller.hears([/post to twitter ([\s\S]*)/], ['direct_message'], function(bot
 });
 
 controller.on('direct_message',function(bot, message) {
-  console.log(message);
   if (message.text.indexOf('help') === -1 || message.text.indexOf('post to twitter') === -1) {
     bot.reply(message, 'Want me to do something? Try asking for "help"');
   }
 });
-
 
 controller.on('rtm_open', function(bot) {
   console.log('** The RTM api just connected: ' + bot.identity.name);
