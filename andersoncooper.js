@@ -32,17 +32,40 @@ controller.setupWebserver(process.env.PORT, function(err, webserver) {
   if (err) {
     throw new Error(err);
   }
+  controller.createWebhookEndpoints(controller.webserver);
   controller.createHomepageEndpoint(controller.webserver);
+  controller.createOauthEndpoints(controller.webserver, function(err, req, res) {
+    if (err) {
+      res.status(500).send('ERROR: ' + err);
+    } else {
+      res.send('Great Success!');
+    }
+  });
 });
 
-var bot = controller.spawn({
-  token: process.env.BOT_TOKEN
-});
+var _bots = {};
+var trackBot = function(bot) {
+  _bots[bot.config.token] = bot;
+};
 
-bot.startRTM(function(err) {
-  if (err) {
-    console.log('Even if you fall on your face, you\'re still moving forward.');
-    throw new Error(err);
+controller.on('create_bot', function(bot, config) {
+  console.log(config);
+  if (_bots[bot.config.token]) {
+    // already online! do nothing.
+  } else {
+    bot.startRTM(function(err) {
+      if (err) {
+        console.log('Even if you fall on your face, you\'re still moving forward.');
+        throw new Error(err);
+      } else if (!err) {
+        trackBot(bot);
+      }
+      bot.startPrivateConversation({user: config.createdBy},function(err, convo) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });
   }
 });
 
