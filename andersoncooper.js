@@ -57,7 +57,7 @@ bot.startRTM(function(err) {
 
 // Helper Functions ===============================================
 
-var getRealNaanFromId = function(bot, userId) {
+var getRealNameFromId = function(bot, userId) {
   var deferred = Q.defer();
   var realName = '';
   bot.api.users.info({user: userId}, function(err, response) {
