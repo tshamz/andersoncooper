@@ -28,13 +28,13 @@ TWITTER_TOKEN
 ```
 
 where:
-`BOT_TOKEN` is the bot's token from your Slack app
-`CLIENT_ID` is the client id from your Slack app
-`CLIENT_SECRET` is the client secret from your Slack app
-`CONSUMER_KEY` from your twitter app
-`CONSUMER_SECRET` from your twitter app
-`TOKEN_SECRET` from your twitter app
-`TWITTER_TOKEN` from your twitter app
+- `BOT_TOKEN` is the bot's token from your Slack app
+- `CLIENT_ID` is the client id from your Slack app
+- `CLIENT_SECRET` is the client secret from your Slack app
+- `CONSUMER_KEY` from your twitter app
+- `CONSUMER_SECRET` from your twitter app
+- `TOKEN_SECRET` from your twitter app
+- `TWITTER_TOKEN` from your twitter app
 
 Once you've finished all the prior steps and deployed your bot to your Heroku server, visit http://[YOUR HEROKU APP URL].com/login to authenticate your bot. Once you've completed the authentication process, the bot should be a part of your team. Message the bot "help" to learn more about the bot and how to use it.
 
